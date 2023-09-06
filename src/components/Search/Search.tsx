@@ -1,7 +1,9 @@
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent } from 'react'
 
+import { selectSearch, setSearchTerm } from './searchSlice'
 import useDebounce from '../../hooks/useDebounce'
 import useSuggestion from '../../hooks/useSuggestion'
+import { useAppDispatch, useAppSelector } from '../../store/reduxHooks'
 
 function Search() {
   return (
@@ -15,7 +17,8 @@ function Search() {
 export default Search
 
 function SearchInput() {
-  const [searchTerm, setSearchTerm] = useState('')
+  const search = useAppSelector(selectSearch)
+  const dispatch = useAppDispatch()
   const { data, fetchData } = useSuggestion('')
 
   const handleSearch = useDebounce(
@@ -28,13 +31,13 @@ function SearchInput() {
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     const { value } = e.target
-    setSearchTerm(value)
+    dispatch(setSearchTerm(value))
     handleSearch(value)
   }
 
   return (
     <>
-      <input value={searchTerm} onChange={handleChange} />
+      <input value={search.searchTerm} onChange={handleChange} />
       <ul>
         {data.map((v) => (
           <li key={v.sickCd}>{v.sickNm}</li>
