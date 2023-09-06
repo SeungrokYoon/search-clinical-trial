@@ -27,7 +27,8 @@
     "lint": "eslint --cache .",
     "lint-fix": "eslint --cache --fix .",
     "postinstall": "husky install",
-    "cleanup-branches": "echo git remote prune origin && git branch -vv | grep ': gone]'| awk '{print $1}' | xargs git branch -D"
+    "cleanup-branches": "echo git remote prune origin && git branch -vv | grep ': gone]'| awk '{print $1}' | xargs git branch -D",
+    "server-start": "npx json-server --watch ./server/db.json --port 4000"
   },
   "eslintConfig": {
     "extends": [
@@ -55,6 +56,7 @@
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "husky": "^8.0.3",
+    "json-server": "^0.17.3",
     "lint-staged": "^14.0.1",
     "prettier": "^3.0.3"
   }
