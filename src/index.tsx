@@ -1,13 +1,20 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
-import App from './App'
+import NotFoundPage from './pages/NotFoundPage'
+import RootPage from './pages/RootPage'
 import reportWebVitals from './reportWebVitals'
+
+const router = createBrowserRouter([
+  { path: '/', element: <RootPage /> },
+  { path: '*', element: <NotFoundPage /> },
+])
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
   <React.StrictMode>
-    <App />
+    <RouterProvider router={router} />
   </React.StrictMode>
 )
 
