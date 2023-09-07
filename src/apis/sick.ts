@@ -1,6 +1,6 @@
 import { instance } from './instance'
 
-type SickObj = {
+export type SickObj = {
   sickCd: string
   sickNm: string
 }

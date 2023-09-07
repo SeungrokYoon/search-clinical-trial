@@ -1,15 +1,19 @@
-import { ChangeEvent, useRef, useState } from 'react'
+import { ChangeEvent, Suspense, useState } from 'react'
 import styled from 'styled-components'
 
 import { selectSearch, setSearchTerm } from './searchSlice'
+import { SickObj } from '../../apis/sick'
 import useDebounce from '../../hooks/useDebounce'
 import useSuggestion from '../../hooks/useSuggestion'
 import { useAppDispatch, useAppSelector } from '../../store/reduxHooks'
 import AsyncButton from '../AsyncButton/AsyncButton'
 
+const DEBOUNCE_INTERVAL = 1000
+
 function Search() {
   const [focusedIndex, setFocusedIndex] = useState(-2)
-  const { data, fetchData, isLoading, isError } = useSuggestion()
+  const { searchTerm } = useAppSelector(selectSearch)
+  const { data, fetchData, isLoading, isError } = useSuggestion(searchTerm)
 
   return (
     <div>
@@ -21,7 +25,7 @@ function Search() {
         loading={isLoading}
         onSearch={fetchData}
       />
-      <SearchResultList
+      <SearchResultList<SickObj>
         data={data}
         error={isError}
         isOpen={focusedIndex === -1}
@@ -44,13 +48,12 @@ interface SearchInputProps {
 function SearchInput({ loading, error, onSearch, changeFocus }: SearchInputProps) {
   const { searchTerm } = useAppSelector(selectSearch)
   const dispatch = useAppDispatch()
-  const inputRef = useRef<HTMLInputElement | null>(null)
 
   const handleSearch = useDebounce(
     (term: string) => {
       onSearch(term)
     },
-    500,
+    DEBOUNCE_INTERVAL,
     []
   )
 
@@ -63,7 +66,6 @@ function SearchInput({ loading, error, onSearch, changeFocus }: SearchInputProps
   return (
     <label htmlFor="searchInput">
       <input
-        ref={inputRef}
         name="q"
         placeholder="질환명을 입력해 주세요"
         type="search"
@@ -97,15 +99,17 @@ interface SearchResultListProps<T> {
 function SearchResultList<T>({ data, renderItem, isOpen, loading }: SearchResultListProps<T>) {
   const { searchTerm } = useAppSelector(selectSearch)
   const searchBarEmpty = searchTerm.length === 0
-  const searchTermExistsButDataIsEmpty = !searchBarEmpty && !loading && data.length === 0
+  const searchTermExistsButDataIsEmpty = !searchBarEmpty && data && data.length === 0
 
   return (
     <StyledAside className={isOpen ? 'open' : 'hide'}>
-      <ul>
-        {searchBarEmpty && <p>검색어를 입력해보세요</p>}
-        {loading ? <>검색중...</> : searchTermExistsButDataIsEmpty ? <p>검색어 없음</p> : ''}
-        {!searchBarEmpty && data.map((v) => renderItem(v))}
-      </ul>
+      <Suspense fallback={<>fallback</>}>
+        <ul>
+          {searchBarEmpty && <p>검색어를 입력해보세요</p>}
+          {loading ? <>검색중...</> : searchTermExistsButDataIsEmpty ? <p>검색어 없음</p> : ''}
+          {!searchBarEmpty && data && data.map((v) => renderItem(v))}
+        </ul>
+      </Suspense>
     </StyledAside>
   )
 }
