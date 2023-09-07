@@ -5,6 +5,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
 import NotFoundPage from './pages/NotFoundPage'
 import RootPage from './pages/RootPage'
+import { CacheContextProvider } from './provider/CacheContextProvider'
 import reportWebVitals from './reportWebVitals'
 import { store } from './store/reduxStore'
 
@@ -17,7 +18,9 @@ const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <RouterProvider router={router} />
+      <CacheContextProvider>
+        <RouterProvider router={router} />
+      </CacheContextProvider>
     </Provider>
   </React.StrictMode>
 )
