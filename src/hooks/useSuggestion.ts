@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import { api } from '../apis'
 import { GetSickResponse } from '../apis/sick'
 
-function useSuggestion(searchTerm: string) {
+function useSuggestion() {
   const [data, setData] = useState<GetSickResponse>([])
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
@@ -23,10 +23,6 @@ function useSuggestion(searchTerm: string) {
       setIsLoading(false)
     }
   }
-
-  useEffect(() => {
-    fetchData(searchTerm)
-  }, [])
 
   return { data, isLoading, isError, fetchData }
 }
