@@ -1,6 +1,8 @@
 import axios from 'axios'
 
-const axiosInstance = axios.create({ baseURL: 'http://localhost:4000/' })
+const BASE_URL = 'https://json-server-6gjfchfpb-wanted-team7.vercel.app'
+
+const axiosInstance = axios.create({ baseURL: BASE_URL })
 
 axiosInstance.interceptors.request.use((config) => {
   console.info('calling api')
