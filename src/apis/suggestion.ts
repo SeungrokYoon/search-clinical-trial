@@ -7,8 +7,8 @@ export type SickObj = {
 
 export type GetSickResponse = SickObj[]
 
-const getSick = (searchTerm: string) => {
+const getSuggestion = (searchTerm: string) => {
   return instance.get<GetSickResponse>('sick', { q: searchTerm })
 }
 
-export const sickApi = { get: getSick }
+export const suggestionApi = { get: getSuggestion }

@@ -1,7 +1,7 @@
-import { sickApi } from './sick'
+import { suggestionApi } from './suggestion'
 
 const api = {
-  sick: sickApi,
+  suggestion: suggestionApi,
 }
 
 export { api }
