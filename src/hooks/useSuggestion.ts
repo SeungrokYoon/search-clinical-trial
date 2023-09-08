@@ -29,7 +29,9 @@ function useSuggestion(queryKey: string) {
   }
 
   return {
-    data: cacheClient.get(queryKey) ? cacheClient.get(queryKey) : data,
+    data: cacheClient.get(queryKey)
+      ? (cacheClient.get(queryKey) as GetSickResponse)
+      : (data as GetSickResponse),
     isLoading,
     isError,
     fetchData,
