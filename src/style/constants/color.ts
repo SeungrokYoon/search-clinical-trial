@@ -8,6 +8,8 @@ export interface ColorType {
   searchTitleText: string
   shadow: string
   divider: string
+  placeholder: string
+  caret: string
 }
 
 export const color: ColorType = {
@@ -20,6 +22,8 @@ export const color: ColorType = {
   searchTitleText: 'rgb(105, 112, 119)',
   shadow: 'rgba(214, 214, 214, 1)',
   divider: `rgb(236, 239, 241)`,
+  placeholder: 'rgb(167,175,183)',
+  caret: 'rgb(25, 118, 210)',
 } as const
 
 export default color

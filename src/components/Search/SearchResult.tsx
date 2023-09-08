@@ -25,7 +25,7 @@ function SearchResult<T>({ data, renderItem, isOpen, loading }: SearchResultProp
             <SearchSubText>최근 검색어가 없습니다</SearchSubText>
             <HorizontalDivider />
           </>
-        )}{' '}
+        )}
         {searchBarEmpty && <SearchMainText>추천 검색어로 검색해보세요</SearchMainText>}
         {!searchBarEmpty && data && <SearchMainText>추천 검색어</SearchMainText>}
         {loading ? (

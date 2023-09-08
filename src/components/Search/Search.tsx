@@ -22,8 +22,7 @@ function Search() {
         changeFocus={(idx: number) => {
           setFocusedIndex(idx)
         }}
-        error={isError}
-        loading={isLoading}
+        focus={focusedIndex}
         onSearch={fetchData}
       />
       <SearchResult<SickObj>
@@ -33,7 +32,7 @@ function Search() {
         loading={isLoading}
         renderItem={(item, index) => (
           <ResultItem>
-            <ResultSearchIcon />
+            <ResultSearchIcon height={18} width={18} />
             <ResultText
               key={item.sickCd}
               $focused={index === focus}
@@ -64,9 +63,7 @@ const ResultItem = styled.li`
   align-items: center;
   padding: 8px 30px;
   & svg {
-    width: 18px;
-    height: 18px;
-    fill: ${({ theme }) => theme.color.searchTitleText};
+    fill: ${({ theme }) => theme.color.placeholder};
     margin-right: 10px;
   }
   cursor: pointer;
