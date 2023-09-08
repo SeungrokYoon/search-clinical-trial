@@ -35,9 +35,7 @@ function SearchResult<T>({ data, renderItem, isOpen, loading }: SearchResultProp
         ) : (
           ''
         )}
-        <StyledUl>
-          {!searchBarEmpty && !loading && data && data.map((v, i) => renderItem(v, i))}
-        </StyledUl>
+        <StyledUl>{!searchBarEmpty && !loading && data.map((v, i) => renderItem(v, i))}</StyledUl>
       </StyledAside>
     </Wrapper>
   )

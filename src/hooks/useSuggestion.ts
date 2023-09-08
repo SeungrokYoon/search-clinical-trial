@@ -15,7 +15,11 @@ function useSuggestion(queryKey: string) {
       setData([])
       return
     }
-    if (cacheClient.get(searchTerm)) return
+    const cacheData = cacheClient.get(searchTerm)
+    if (cacheData) {
+      setData(cacheData)
+      return
+    }
     setIsLoading(true)
     try {
       const res = await api.suggestion.get(searchTerm)
@@ -29,9 +33,7 @@ function useSuggestion(queryKey: string) {
   }
 
   return {
-    data: cacheClient.get(queryKey)
-      ? (cacheClient.get(queryKey) as GetSickResponse)
-      : (data as GetSickResponse),
+    data,
     isLoading,
     isError,
     fetchData,
