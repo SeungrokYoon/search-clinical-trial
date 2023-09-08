@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import styled from 'styled-components'
 
+import ResultSearchIcon from './ResultSearchIcon'
 import SearchInput from './SearchInput'
 import SearchResult from './SearchResult'
 import { selectSearch } from './searchSlice'
@@ -16,7 +17,7 @@ function Search() {
   const { focus, setMouseMove } = useKeyboardNavigation<SickObj>(data)
 
   return (
-    <div>
+    <SearchBox>
       <SearchInput
         changeFocus={(idx: number) => {
           setFocusedIndex(idx)
@@ -31,25 +32,50 @@ function Search() {
         isOpen={focusedIndex === -1}
         loading={isLoading}
         renderItem={(item, index) => (
-          <StyledLi
-            key={item.sickCd}
-            $focused={index === focus}
-            onMouseEnter={() => setMouseMove(true, index)}
-            onMouseLeave={() => {
-              setMouseMove(false, -1)
-            }}
-          >
-            {item.sickNm}
-          </StyledLi>
+          <ResultItem>
+            <ResultSearchIcon />
+            <ResultText
+              key={item.sickCd}
+              $focused={index === focus}
+              onMouseEnter={() => setMouseMove(true, index)}
+              onMouseLeave={() => {
+                setMouseMove(false, -1)
+              }}
+            >
+              {item.sickNm}
+            </ResultText>
+          </ResultItem>
         )}
       />
-    </div>
+    </SearchBox>
   )
 }
 
 export default Search
 
-const StyledLi = styled.li<{ $focused: boolean }>`
-  background-color: ${({ $focused }) => ($focused ? 'blue' : 'yellow')};
+const SearchBox = styled.div`
+  max-width: 490px;
+  margin: 0 auto;
+  width: 100%;
+`
+
+const ResultItem = styled.li`
+  display: flex;
+  align-items: center;
+  padding: 8px 30px;
+  & svg {
+    width: 18px;
+    height: 18px;
+    fill: ${({ theme }) => theme.color.searchTitleText};
+    margin-right: 10px;
+  }
   cursor: pointer;
+`
+
+const ResultText = styled.div<{ $focused: boolean }>`
+  width: 100%;
+  font-size: 18px;
+  line-height: 1.5;
+  background-color: ${({ theme, $focused }) =>
+    $focused ? theme.color.keyboardBg : theme.color.white};
 `
