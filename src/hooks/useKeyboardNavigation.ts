@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useReducer, useState } from 'react'
 
-const INITIAL_INDEX = -1
+const INITIAL_INDEX = -2
 const KEY_MAP = {
   ARROW_DOWN: 'ArrowDown',
   ARROW_UP: 'ArrowUp',

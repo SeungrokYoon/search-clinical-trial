@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import styled from 'styled-components'
 
+import ResultSearchIcon from './ResultSearchIcon'
 import SearchInput from './SearchInput'
 import SearchResult from './SearchResult'
 import { selectSearch } from './searchSlice'
-import { SickObj } from '../../apis/sick'
+import { SickObj } from '../../apis/suggestion'
 import useKeyboardNavigation from '../../hooks/useKeyboardNavigation'
 import useSuggestion from '../../hooks/useSuggestion'
 import { useAppSelector } from '../../store/reduxHooks'
@@ -16,13 +17,12 @@ function Search() {
   const { focus, setMouseMove } = useKeyboardNavigation<SickObj>(data)
 
   return (
-    <div>
+    <SearchBox>
       <SearchInput
         changeFocus={(idx: number) => {
           setFocusedIndex(idx)
         }}
-        error={isError}
-        loading={isLoading}
+        focus={focusedIndex}
         onSearch={fetchData}
       />
       <SearchResult<SickObj>
@@ -31,25 +31,48 @@ function Search() {
         isOpen={focusedIndex === -1}
         loading={isLoading}
         renderItem={(item, index) => (
-          <StyledLi
-            key={item.sickCd}
-            $focused={index === focus}
-            onMouseEnter={() => setMouseMove(true, index)}
-            onMouseLeave={() => {
-              setMouseMove(false, -1)
-            }}
-          >
-            {item.sickNm}
-          </StyledLi>
+          <ResultItem>
+            <ResultSearchIcon height={18} width={18} />
+            <ResultText
+              key={item.sickCd}
+              $focused={index === focus}
+              onMouseEnter={() => setMouseMove(true, index)}
+              onMouseLeave={() => {
+                setMouseMove(false, -1)
+              }}
+            >
+              {item.sickNm}
+            </ResultText>
+          </ResultItem>
         )}
       />
-    </div>
+    </SearchBox>
   )
 }
 
 export default Search
 
-const StyledLi = styled.li<{ $focused: boolean }>`
-  background-color: ${({ $focused }) => ($focused ? 'blue' : 'yellow')};
+const SearchBox = styled.div`
+  max-width: 490px;
+  margin: 0 auto;
+  width: 100%;
+`
+
+const ResultItem = styled.li`
+  display: flex;
+  align-items: center;
+  padding: 8px 30px;
+  & svg {
+    fill: ${({ theme }) => theme.color.placeholder};
+    margin-right: 10px;
+  }
   cursor: pointer;
+`
+
+const ResultText = styled.div<{ $focused: boolean }>`
+  width: 100%;
+  font-size: 18px;
+  line-height: 1.5;
+  background-color: ${({ theme, $focused }) =>
+    $focused ? theme.color.keyboardBg : theme.color.white};
 `
