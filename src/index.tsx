@@ -14,7 +14,7 @@ import GlobalStyle from './style/base/GlobalStyle'
 
 const router = createBrowserRouter([
   { path: '/', element: <RootPage /> },
-  { path: '*', element: <NotFoundPage /> },
+  { path: '*', element: <NotFoundPage errorType="NOT_FOUND" /> },
 ])
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
