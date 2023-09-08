@@ -12,6 +12,8 @@
 
 [목표] [한국임상정보](https://clinicaltrialskorea.com/) 클론하여 검색 및 캐싱 기능을 구현한 웹 사이트 구축
 
+[요구사항] [링크](https://sonicrok.notion.site/Week-3-b4b432b8e53e4a50b83a1c969c7bd2d9?pvs=4)
+
 ## 지원자 소개
 
 <img src="https://avatars.githubusercontent.com/SeungrokYoon" width="130" height="130">
@@ -58,33 +60,51 @@ npm install
 npm start
 ```
 
+### 로컬 실행
+
+1. env 파일 사용시
+
+- `.env.local` 파일을 생성하고,
+
+```text
+REACT_APP_BASE_URL = https://json-server-6gjfchfpb-wanted-team7.vercel.app
+```
+
+를 입력 후 `npm start`
+
+2. env 파일을 사용 안하고, 로컬 JSON-server 구동
+
+```
+//두 개의 쉘에서 아래 스크립트를 각각 실행해줍니다.
+npm start
+npm run server-start
+```
+
 ## 배포 링크
 
 배포 링크: [https://search-clinical-trial.vercel.app](https://search-clinical-trial.vercel.app)
 
 배포는 `vercel` 서비스를 사용했습니다.
 
+서버 또한 `vercel`을 통해 `JSON-SERVER`를 배포하여 사용했습니다.
+
+서버 레포지토리는 [여기](https://github.com/wanted-pre-onboarding-team-12th-7/json-server)입니다!
+
 ## 데모영상
 
 ![final](https://github.com/SeungrokYoon/search-clinical-trial/assets/44149596/683e8800-cd0b-4ea5-800f-81155ddb00ae)
 
-### 디렉토리 구조
-
-```
-
-```
-
 ## 1. 질환명 검색시 API 호출 통해서 검색어 추천 기능 구현
 
-### 1-1. API 호출 영역을 custom hook으로 분리하여 추상화
-
-### 1-2. useSuggestions 구현 방법
-
-### 1-3. 검색창 컴포넌트 - Search 설계
+### 1-1. 검색창 컴포넌트 - Search 설계
 
 리덕스 툴킷으로 컴포넌트의 상태를 관리하였습니다.
 
 ![image](https://github.com/SeungrokYoon/search-clinical-trial/assets/44149596/46191c1f-f2ef-411f-a827-91de3623f4ea)
+
+### 1-2 서버 데이터 호출
+
+- `useSuggestion` 커스텀 훅에서 데이터, 로딩, 에러상태를 리턴합니다.
 
 ## 2. API 호출 별 로컬 캐싱 구현
 
@@ -113,11 +133,23 @@ npm start
 [React-Query 공식블로그 - Inside React Query](https://tkdodo.eu/blog/inside-react-query) 글에서 영감을 받았습니다.
 
 > `CacheStore` : 단순한 `Map` 객체입니다. 검색어와 검색 결과가 각각 키:값 쌍으로 저장되게 됩니다.
+>
 > `CacheClient`: CacheStore를 다양한 매서드를 통해 조작하는 클래스입니다. CacheStore는 private하게 관리됩니다.
+>
 > `CacheContextProvider` : 컨텍스트 API를 통해 전역으로 캐시 클라이언트에 접근할 수 있도록 맥락을 설정해줍니다.
+>
 > `useCacheContext` : 하위 컴포넌트들에서 해당 훅을 통해 캐시 클라이언트에 접근하여 정해진 인터페이스를 통해 캐시를 조작할 수 있습니다.
 
 ### 2-3. Expire time 구현
+
+- 캐시 데이터 저장 시, CacheStore 생성자 함수에 전달된 `expireMinute` 을 `ms` 로 변환하여 `Date.now()`와 합쳐 저장합니다.
+- 특정 쿼리키 데이터의 만료시간 = `expireMinute * 60000` + `현재 시간`
+- 비동기 요청함수가 실행되면, 캐시를 먼저 검사하여 유효한(expired 되지 않은) 캐시를 리턴받아 데이터로 업데이트해줍니다.
+- 만약 캐시가 존재하지 않으면 그대로 네트워크 함수를 호출합니다.
+
+![스크린샷 2023-09-08 오후 11 02 13](https://github.com/SeungrokYoon/search-clinical-trial/assets/44149596/7e27a167-65aa-4ba1-a660-d132b20d65f6)
+
+- 설정해놓은 1분이 지나니, `expired`되어 새로 데이터를 호출해옵니다.
 
 ## 3. 입력마다 API 호출하지 않도록 API 호출 횟수를 줄이는 전략 수립 및 실행
 
@@ -194,13 +226,67 @@ export default SearchInput
 - `Search` 컴포넌트가 마운트되었을 때 window에 keydown 이벤트핸들러를 등록하여 관련 키보드 동작을 구현했습니다.
 - 해당 동작관련 로직들은 `useKeyboardNavigation`에서 관리합니다.
 
-### 4-2. 사용 방법
+### 4-1. 사용 방법
 
 > - `↑` : 추천 검색어의 이전(위) 요소로 이동합니다. 첫 번째 요소에서 입력 시 추천 검색어 목록을 닫습니다.
 > - `↓`: 추천 검색어의 다음(아래) 요소로 선택 이동합니다. 마지막 요소에서 입력 시 동작하지 않습니다.
 > - `esc`: 추천 검색어 목록을 닫습니다.
 > - 마우스 호버시 키보드와 동일하게 추천 검색어 요소를 선택 이동 가능합니다.
 
-```
+## 5. 디렉토리 구조
 
+```
+📦src
+ ┣ 📂apis
+ ┃ ┣ 📜index.ts
+ ┃ ┣ 📜instance.ts
+ ┃ ┗ 📜suggestion.ts
+ ┣ 📂components
+ ┃ ┣ 📂AsyncButton
+ ┃ ┃ ┗ 📜AsyncButton.tsx
+ ┃ ┣ 📂Header
+ ┃ ┃ ┣ 📜Header.tsx
+ ┃ ┃ ┗ 📜HeaderIconButton.tsx
+ ┃ ┣ 📂Search
+ ┃ ┃ ┣ 📜ResultSearchIcon.tsx
+ ┃ ┃ ┣ 📜Search.tsx
+ ┃ ┃ ┣ 📜SearchIcon.tsx
+ ┃ ┃ ┣ 📜SearchIconButton.tsx
+ ┃ ┃ ┣ 📜SearchInput.tsx
+ ┃ ┃ ┣ 📜SearchResult.tsx
+ ┃ ┃ ┗ 📜searchSlice.ts
+ ┃ ┗ 📂common
+ ┃ ┃ ┗ 📜BaseButton.tsx
+ ┣ 📂context
+ ┃ ┗ 📜cacheContext.ts
+ ┣ 📂hooks
+ ┃ ┣ 📜useCacheContext.ts
+ ┃ ┣ 📜useDebounce.ts
+ ┃ ┣ 📜useKeyboardNavigation.ts
+ ┃ ┗ 📜useSuggestion.ts
+ ┣ 📂pages
+ ┃ ┣ 📜NotFoundPage.tsx
+ ┃ ┗ 📜RootPage.tsx
+ ┣ 📂provider
+ ┃ ┗ 📜CacheContextProvider.tsx
+ ┣ 📂store
+ ┃ ┣ 📜cacheClient.ts
+ ┃ ┣ 📜cacheStore.ts
+ ┃ ┣ 📜reduxHooks.ts
+ ┃ ┗ 📜reduxStore.ts
+ ┣ 📂style
+ ┃ ┣ 📂base
+ ┃ ┃ ┣ 📜DefaultTheme.ts
+ ┃ ┃ ┣ 📜GlobalStyle.ts
+ ┃ ┃ ┗ 📜styled.d.ts
+ ┃ ┗ 📂constants
+ ┃ ┃ ┣ 📜color.ts
+ ┃ ┃ ┣ 📜flex.ts
+ ┃ ┃ ┗ 📜fontsize.ts
+ ┣ 📂utils
+ ┃ ┗ 📜debounce.ts
+ ┣ 📜index.tsx
+ ┣ 📜react-app-env.d.ts
+ ┣ 📜reportWebVitals.ts
+ ┗ 📜setupTests.ts
 ```
