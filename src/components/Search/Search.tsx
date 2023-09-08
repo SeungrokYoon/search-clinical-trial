@@ -31,10 +31,9 @@ function Search() {
         isOpen={focusedIndex === -1}
         loading={isLoading}
         renderItem={(item, index) => (
-          <ResultItem key={item.sickCd}>
+          <ResultItem key={item.sickCd} $focused={index === focus}>
             <ResultSearchIcon height={18} width={18} />
             <ResultText
-              $focused={index === focus}
               onMouseEnter={() => setMouseMove(true, index)}
               onMouseLeave={() => {
                 setMouseMove(false, -1)
@@ -57,7 +56,7 @@ const SearchBox = styled.div`
   width: 100%;
 `
 
-const ResultItem = styled.li`
+const ResultItem = styled.li<{ $focused: boolean }>`
   display: flex;
   align-items: center;
   padding: 8px 30px;
@@ -66,12 +65,12 @@ const ResultItem = styled.li`
     margin-right: 10px;
   }
   cursor: pointer;
+  background-color: ${({ theme, $focused }) =>
+    $focused ? theme.color.keyboardBg : theme.color.white};
 `
 
-const ResultText = styled.div<{ $focused: boolean }>`
+const ResultText = styled.div`
   width: 100%;
   font-size: 18px;
   line-height: 1.5;
-  background-color: ${({ theme, $focused }) =>
-    $focused ? theme.color.keyboardBg : theme.color.white};
 `
