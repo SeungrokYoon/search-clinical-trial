@@ -18,7 +18,7 @@ export const color: ColorType = {
   bgColor: 'rgb(240 248 254)',
   white: '#ffffff',
   bannerBgColor: 'rgb(202,233,255)',
-  keyboardBg: 'rgb(248, 249, 250)',
+  keyboardBg: 'rgb(237,240,242)',
   searchTitleText: 'rgb(105, 112, 119)',
   shadow: 'rgba(214, 214, 214, 1)',
   divider: `rgb(236, 239, 241)`,
