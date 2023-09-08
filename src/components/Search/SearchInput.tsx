@@ -42,7 +42,6 @@ function SearchInput({ loading, error, onSearch, changeFocus }: SearchInputProps
         onBlur={() => changeFocus(-2)}
         onChange={handleChange}
         onFocus={() => changeFocus(-1)}
-        onKeyDown={(e) => e.preventDefault()}
       />
       <AsyncButton
         error={error}
