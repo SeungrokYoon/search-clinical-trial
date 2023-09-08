@@ -60,6 +60,26 @@ npm install
 npm start
 ```
 
+### 로컬 실행
+
+1. env 파일 사용시
+
+- `.env.local` 파일을 생성하고,
+
+```text
+REACT_APP_BASE_URL = https://json-server-6gjfchfpb-wanted-team7.vercel.app
+```
+
+를 입력 후 `npm start`
+
+2. env 파일을 사용 안하고, 로컬 JSON-server 구동
+
+```
+//두 개의 쉘에서 아래 스크립트를 각각 실행해줍니다.
+npm start
+npm run server-start
+```
+
 ## 배포 링크
 
 배포 링크: [https://search-clinical-trial.vercel.app](https://search-clinical-trial.vercel.app)
