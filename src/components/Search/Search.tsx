@@ -31,10 +31,9 @@ function Search() {
         isOpen={focusedIndex === -1}
         loading={isLoading}
         renderItem={(item, index) => (
-          <ResultItem>
+          <ResultItem key={item.sickCd}>
             <ResultSearchIcon height={18} width={18} />
             <ResultText
-              key={item.sickCd}
               $focused={index === focus}
               onMouseEnter={() => setMouseMove(true, index)}
               onMouseLeave={() => {
